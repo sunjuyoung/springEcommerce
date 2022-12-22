@@ -1,0 +1,20 @@
+server:
+  port: 8087
+
+spring:
+  datasource:
+    url: jdbc:mariadb://localhost:3306/shopapi
+    driver-class-name: org.mariadb.jdbc.Driver
+    username: root
+    password: rnrdj123
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: true
+
+logging:
+  level:
+    com.example.ecommerce: debug
