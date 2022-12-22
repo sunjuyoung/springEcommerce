@@ -1,12 +1,14 @@
 import React, { useState } from 'react'
 import './Product.scss';
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
+import FavoriteOutlinedIcon from "@mui/icons-material/FavoriteOutlined";
 import BalanceIcon from "@mui/icons-material/Balance";
 
 const Product = () => {
 
   const [selectedImg, setSelectedImg] = useState(0);
+  const [quantity, setQuantity] = useState(1);
 
   const data = 
     {
@@ -27,12 +29,12 @@ const Product = () => {
 
   return (
     <div className='product'>
-       <div className="left">
+      <div className="left">
             <div className="images">
               <img
                 src={images[0]}
                 alt=""
-               onClick={e=>setSelectedImg(0)}
+                onClick={e=>setSelectedImg(0)}
               />
               <img
                 src={images[1]}
@@ -50,15 +52,25 @@ const Product = () => {
           <div className="right">
             <h1>터틀넥티셔츠</h1>
             <hr></hr>
-            <span className="price">1000</span>
+
+            <div className="pCode_rCount">
+              <span>상품 코드 : </span>
+              <span className="code">MD399</span>
+              <span className="rCount">21건</span>
+            </div>
+            <div className="price">
+              <span>판매가격 :</span>
+              <span className="price">1000</span>
+            </div>
+            
             <p>{data?.attributes?.desc}</p>
             <div className="quantity">
-              <button
+              <button onClick={e=>setQuantity(prev=>prev>1? prev-1: prev)}
               >
                 -
               </button>
-              1
-              <button>+</button>
+              {quantity}
+              <button onClick={e=>setQuantity(prev=>prev+1)}>+</button>
             </div>
             <button
               className="add"
@@ -67,7 +79,7 @@ const Product = () => {
             </button>
             <div className="links">
               <div className="item">
-                <FavoriteBorderIcon /> ADD TO WISH LIST
+                <FavoriteOutlinedIcon style={{color:"red"}} /> ADD TO WISH LIST
               </div>
               <div className="item">
                 <BalanceIcon /> ADD TO COMPARE
@@ -86,7 +98,7 @@ const Product = () => {
               <hr />
               <span>FAQ</span>
             </div>
-          </div>
+        </div>
     </div>
   )
 }

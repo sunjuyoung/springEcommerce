@@ -35,9 +35,22 @@
       gap: 30px;
   
       .price{
-        font-size: 30px;
-        color: #2879fe;
+        font-size: 15px;
+        
         font-weight: 500;
+        span{
+          margin-right: 10px;
+        }
+       
+      }
+      .pCode_rCount{
+        font-size: 15px;
+       
+        font-weight: 500;
+        gap: 10px;
+        span{
+          margin-right: 15px;
+        }
       }
   
       p{
@@ -84,7 +97,7 @@
           display: flex;
           align-items: center;
           gap: 10px;
-          color: #2879fe;
+          
           font-size: 14px;
         }
       }
