@@ -3,13 +3,13 @@ package com.example.ecommerce.domain.member;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
-@Builder
+
 @Getter
 @Entity
-@AllArgsConstructor
 public class Member {
 
 
@@ -18,6 +18,7 @@ public class Member {
 
     private String name;
     private String password;
+    private String email;
 
     @Embedded
     private Address address;
@@ -29,4 +30,11 @@ public class Member {
     protected Member(){
     }
 
+    public Member(MemberId id, String name, String password,String email) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.grade = Grade.GUEST;
+    }
 }
