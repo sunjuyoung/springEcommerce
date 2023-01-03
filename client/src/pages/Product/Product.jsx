@@ -4,11 +4,13 @@ import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import FavoriteOutlinedIcon from "@mui/icons-material/FavoriteOutlined";
 import BalanceIcon from "@mui/icons-material/Balance";
+import { useDispatch, useSelector } from 'react-redux';
+import { addToCart, selectCart,  } from '../../redux/cartReducer';
 
 const Product = () => {
-
   const [selectedImg, setSelectedImg] = useState(0);
   const [quantity, setQuantity] = useState(1);
+  const dispath = useDispatch();
 
   const data = 
     {
@@ -72,7 +74,12 @@ const Product = () => {
               {quantity}
               <button onClick={e=>setQuantity(prev=>prev+1)}>+</button>
             </div>
-            <button
+            <button onClick={()=>dispath(addToCart({
+              id:data.id,
+              quantity:quantity,
+              price:data.price,
+              title:data.title
+            }))}  
               className="add"
             >
               <AddShoppingCartIcon /> ADD TO CART

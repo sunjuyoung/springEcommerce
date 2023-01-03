@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import "./Card.scss";
 
 const Card = ({item}) => {
+
   return (
     <Link to={`/product/${item.id}`} style={{textDecorationLine:'none'}}>
         <div className='card'>

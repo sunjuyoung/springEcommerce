@@ -10,9 +10,11 @@ Link
   } from "react-router-dom";
 import './Navbar.scss'
 import Cart from '../Cart/Cart';
+import { useSelector } from 'react-redux';
+import { selectCart } from '../../redux/cartReducer';
 
 const Navbar = () => {
-
+    const products = useSelector(selectCart);
   return (
     <div className='navbar'>
         <div className='wrapper'>
@@ -65,7 +67,7 @@ const Navbar = () => {
                 <div className='cartIcon'>
                     <Link className='link' to="/cart/1">
                         <ShoppingCartOutlinedIcon />
-                        <span>0</span>
+                        <span>{products.length}</span>
                     </Link>
                 </div>
             </div>
