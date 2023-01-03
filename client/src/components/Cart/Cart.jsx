@@ -2,11 +2,17 @@ import React, { useState } from 'react'
 import "./Cart.scss";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import { useDispatch, useSelector } from 'react-redux';
-import { removeItem, selectCart,resetCart } from '../../redux/cartReducer';
+import { removeItem, selectCart,resetCart,plusCartItem,minusCartItem } from '../../redux/cartReducer';
 
 const Cart = () => {
   const products = useSelector(selectCart);
   const dispatch = useDispatch();
+
+  const totalPrice = () =>{
+    let total = 0;
+    products.forEach((item)=> total+= item.quantity * item.price);
+    return total;
+  }
 
   return (
     <div className="cart">
@@ -18,18 +24,17 @@ const Cart = () => {
           <h1>{item.title}</h1>
           <p>{item.desc?.substring(0, 100)}</p>
 
-          <div className="price">
-            {item.quantity} x ${item.price}
+          <div className="quantity">
+            <button onClick={()=>dispatch(minusCartItem({id:item.id}))}>-</button>
+              {item.quantity}
+              <button onClick={()=>dispatch(plusCartItem({id:item.id}))}>+</button>
           </div>
         </div>
 
-
         <div className="item_total">
-          <span>10000</span>
+          <span>{item.quantity * item.price}원</span>
         </div>
 
-
- 
         <DeleteOutlinedIcon
           className="delete"
           onClick={()=>dispatch(removeItem({
@@ -41,7 +46,7 @@ const Cart = () => {
     ))}
     <div className="total">
       <span>SUBTOTAL</span>
-      <span>10000</span>
+      <span>{totalPrice()}원</span>
     </div>
     <button>PROCEED TO CHECKOUT</button>
     <span className="reset" onClick={()=>dispatch(resetCart())}>

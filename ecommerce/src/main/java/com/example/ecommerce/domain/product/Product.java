@@ -7,11 +7,13 @@ import lombok.Builder;
 import lombok.Getter;
 
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-@Builder
+
 @Getter
 @Entity
 @AllArgsConstructor
@@ -25,6 +27,8 @@ public class Product {
     private int price;
 
     private String detail;
+
+    private LocalDate regDate;
 
     @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name = "product_category",

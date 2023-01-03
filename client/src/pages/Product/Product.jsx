@@ -6,11 +6,14 @@ import FavoriteOutlinedIcon from "@mui/icons-material/FavoriteOutlined";
 import BalanceIcon from "@mui/icons-material/Balance";
 import { useDispatch, useSelector } from 'react-redux';
 import { addToCart, selectCart,  } from '../../redux/cartReducer';
+import { useNavigate } from 'react-router-dom';
 
 const Product = () => {
+  const [openModal, setOpenModal] = useState(false);
   const [selectedImg, setSelectedImg] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const dispath = useDispatch();
+  const navigate = useNavigate();
 
   const data = 
     {
@@ -28,6 +31,16 @@ const Product = () => {
       "https://images.pexels.com/photos/1163194/pexels-photo-1163194.jpeg?auto=compress&cs=tinysrgb&w=1600"
     ]
 
+    const handleAddCart = (e) =>{
+     
+      dispath(addToCart({
+        id:data.id,
+        quantity:quantity,
+        price:data.price,
+        title:data.title
+      }));
+      setOpenModal(true);
+    }
 
   return (
     <div className='product'>
@@ -74,12 +87,19 @@ const Product = () => {
               {quantity}
               <button onClick={e=>setQuantity(prev=>prev+1)}>+</button>
             </div>
-            <button onClick={()=>dispath(addToCart({
-              id:data.id,
-              quantity:quantity,
-              price:data.price,
-              title:data.title
-            }))}  
+            {openModal && (
+              <div className='modal'>
+                <div className='head'>
+                  <button onClick={()=>setOpenModal(false)}>x</button>
+                </div>
+                <div className='body'>상품이 카트에 담겼습니다.</div>
+                <div className='bottom'>
+                  <button onClick={()=>navigate("/cart/1")}>장바구니로 이동</button>
+                  <button onClick={()=>setOpenModal(false)}>계속 쇼핑하기</button>
+                </div>
+              </div>
+            )}
+            <button onClick={handleAddCart}  
               className="add"
             >
               <AddShoppingCartIcon /> ADD TO CART

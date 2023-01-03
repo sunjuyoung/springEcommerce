@@ -75,6 +75,22 @@ public class Order {
         this.orderer = orderer;
     }
 
+    public void changeShippingInfo(ShippingInfo newShippingInfo){
+        if(!isNotYetShipped()){
+            throw new RuntimeException("can not be changed after ship ");
+        }
+        setShippingInfo(newShippingInfo);
+    }
+    public void cancel(){
+        if(!isNotYetShipped()){
+            throw new RuntimeException("can not be cancel ");
+        }
+        this.state = OrderState.CANCELED;
+    }
+
+    private boolean isNotYetShipped(){
+        return state == OrderState.PAYMENT_WAITING || state ==OrderState.PREPARING;
+    }
 
 
 

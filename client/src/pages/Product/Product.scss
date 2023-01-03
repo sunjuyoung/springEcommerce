@@ -3,6 +3,36 @@
     display: flex;
     gap: 50px;
   
+    .modal{
+      position: absolute;
+      width: 220px;
+      height: 100px;
+      right: 440px;
+      top: 390px;
+      z-index: 999;
+      background-color: rgb(236, 224, 224);
+      padding: 20px;
+      -webkit-box-shadow: 0px 0px 7px -5px rgba(0, 0, 0, 0.5);
+      box-shadow: 0px 0px 7px -5px rgba(0, 0, 0, 0.5);
+      .head{
+        display: flex;
+        justify-content: end;
+        justify-items: end;
+        margin-bottom: 10px;
+      }
+      .bottom{
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+      }
+       button{
+
+        align-items: center;
+        cursor: pointer;
+ 
+        }
+    }
+
     .left {
       flex: 1;
       display: flex;

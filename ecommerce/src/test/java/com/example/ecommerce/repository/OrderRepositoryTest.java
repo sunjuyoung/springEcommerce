@@ -25,17 +25,19 @@ class OrderRepositoryTest {
     @Test
     public void test() throws Exception{
         //given
-        Member member = new Member(new MemberId(1L),"test","1234","test");
+
+        Member member = new Member(MemberId.of(1L),"test","1234","test");
         Address address = new Address("test","test","test");
         ShippingInfo shippingInfo = new ShippingInfo(address,member.getName(),"test");
-        ProductId productId = new ProductId("prod-001");
-        ProductId productId1 = new ProductId("prod-002");
+        ProductId productId =  ProductId.of("prod-001");
+        ProductId productId1 = ProductId.of("prod-002");
         List<OrderLine> orderLineList = new ArrayList<>();
         OrderLine orderLine = new OrderLine(productId,1000,3);
         OrderLine orderLine1 = new OrderLine(productId1,2000,2);
         orderLineList.add(orderLine);
         orderLineList.add(orderLine1);
-        Order order = new Order(new OrderId(2L),
+        Order order = new Order(OrderId.of(
+                2L),
                 new Orderer(member.getId(),member.getName()),
                 orderLineList,
                 shippingInfo,
