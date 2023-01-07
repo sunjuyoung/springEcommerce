@@ -12,6 +12,8 @@ import Product from "./pages/Product/Product";
 import Products from "./pages/Products/Products";
 import './app.scss';
 import Cart from "./components/Cart/Cart";
+import Login from "./pages/Login/Login";
+import SignUp from "./pages/SignUp/SignUp";
 
 
 const Layout = () =>{
@@ -34,6 +36,14 @@ const router = createBrowserRouter([
       {
         path:"/",
         element: <Home />,
+      },
+      {
+        path:"/login",
+        element: <Login />,
+      },
+      {
+        path:"/SignUp",
+        element: <SignUp />,
       },
       {
         path: "/products/:id",
