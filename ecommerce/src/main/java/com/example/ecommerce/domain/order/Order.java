@@ -1,33 +1,34 @@
 package com.example.ecommerce.domain.order;
 
-import com.example.ecommerce.domain.member.MemberId;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
+import net.bytebuddy.asm.Advice;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 @Entity
+@AllArgsConstructor
 @Table(name = "orders")
 public class Order {
 
 
-    @EmbeddedId
-    private OrderId id;
+    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "order_id")
+    private Long id;
 
-    @ElementCollection(fetch = FetchType.LAZY)
-    @CollectionTable(name = "order_line", joinColumns = @JoinColumn(name = "order_id"))
-    @OrderColumn(name = "line_idx")
-    List<OrderLine> orderLines;
+
+    @OneToMany(mappedBy = "order",
+            cascade = CascadeType.REMOVE,
+            orphanRemoval = true)
+    private List<OrderLine> orderLines = new ArrayList<>();
 
     @Column(name = "order_date")
     private LocalDateTime orderDate;
 
-    @Embedded
-    private Orderer orderer;
 
     @Enumerated(EnumType.STRING)
     private OrderState state;
@@ -38,13 +39,16 @@ public class Order {
     @Embedded
     private ShippingInfo shippingInfo;
 
+    @OneToOne
+    private Delivery delivery;
+
+
     protected Order(){
     }
 
-    public Order(OrderId id, Orderer orderer, List<OrderLine> orderLines,
+    public Order( List<OrderLine> orderLines,
                  ShippingInfo shippingInfo, OrderState state) {
-        setId(id);
-        setOrderer(orderer);
+
         setOrderLines(orderLines);
         setShippingInfo(shippingInfo);
         this.state = state;
@@ -52,10 +56,7 @@ public class Order {
 
     }
 
-    private void setId(OrderId id) {
-        if (id == null) throw new IllegalArgumentException("no number");
-        this.id = id;
-    }
+
 
     private void setShippingInfo(ShippingInfo shippingInfo) {
         if (shippingInfo == null) throw new IllegalArgumentException("no shipping info");
@@ -70,10 +71,7 @@ public class Order {
         this.totalAmounts = orderLines.stream().mapToInt(x -> x.getAmounts()).sum();
     }
 
-    private void setOrderer(Orderer orderer) {
-        if (orderer == null) throw new IllegalArgumentException("no orderer");
-        this.orderer = orderer;
-    }
+
 
     public void changeShippingInfo(ShippingInfo newShippingInfo){
         if(!isNotYetShipped()){

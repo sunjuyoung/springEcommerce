@@ -1,7 +1,8 @@
 package com.example.ecommerce.domain.product;
 
 
-import com.example.ecommerce.domain.category.CategoryId;
+import com.example.ecommerce.domain.category.Category;
+import com.example.ecommerce.domain.review.Review;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,6 +11,7 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -19,8 +21,9 @@ import java.util.Set;
 @AllArgsConstructor
 public class Product {
 
-    @EmbeddedId
-    private ProductId id;
+    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "product_id")
+    private Long id;
 
     private String name;
 
@@ -30,23 +33,25 @@ public class Product {
 
     private LocalDate regDate;
 
-    @ElementCollection(fetch = FetchType.LAZY)
-    @CollectionTable(name = "product_category",
-            joinColumns = @JoinColumn(name = "product_id"))
-    private Set<CategoryId> categoryIds;
 
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
-            orphanRemoval = true, fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id")
-    @OrderColumn(name = "list_idx")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id")
+    private Category category;
+
+//    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
+//            orphanRemoval = true, fetch = FetchType.LAZY)
+    @ElementCollection
+    @CollectionTable(name = "product_images", joinColumns = @JoinColumn(name = "product_id"))
     private List<Image> images = new ArrayList<>();
 
+    @OneToMany
+    private List<Review> review = new ArrayList<>();
 
     protected Product(){
     }
 
-    public Product(ProductId id, String name, int price, String detail, List<Image> images) {
-        this.id = id;
+    public Product( String name, int price, String detail, List<Image> images) {
+
         this.name = name;
         this.price = price;
         this.detail = detail;

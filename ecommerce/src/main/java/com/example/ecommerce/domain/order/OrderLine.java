@@ -1,21 +1,26 @@
 package com.example.ecommerce.domain.order;
 
-import com.example.ecommerce.domain.product.ProductId;
+import com.example.ecommerce.domain.product.Product;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Convert;
-import javax.persistence.Embeddable;
-import javax.persistence.Embedded;
+import javax.persistence.*;
 
 @Getter
-@Embeddable
-@NoArgsConstructor
+@Entity
+@AllArgsConstructor
+@Table(name = "order_line")
 public class OrderLine {
 
-    @Embedded
-    private ProductId productId;
+
+    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "order_line_id")
+    private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    private Product product;
 
     @Column(name = "price")
     private int price;
@@ -26,9 +31,16 @@ public class OrderLine {
     @Column(name = "amounts")
     private int amounts;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "order_id")
+    private Order order;
 
-    public OrderLine(ProductId productId, int price, int quantity) {
-        this.productId = productId;
+
+    protected OrderLine(){}
+
+
+    public OrderLine( int price, int quantity) {
+
         this.price = price;
         this.quantity = quantity;
         this.amounts = price * quantity;

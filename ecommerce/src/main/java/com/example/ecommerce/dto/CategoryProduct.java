@@ -1,15 +1,9 @@
 package com.example.ecommerce.dto;
 
-import com.example.ecommerce.domain.category.CategoryId;
-import com.example.ecommerce.domain.product.Image;
-import com.example.ecommerce.domain.product.ProductId;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Data;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
 
 @Data
 public class CategoryProduct {

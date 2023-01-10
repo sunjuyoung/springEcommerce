@@ -1,12 +1,17 @@
 package com.example.ecommerce.domain.product;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 import javax.persistence.*;
 
-@Entity
+
+@Getter
+@Embeddable
+@AllArgsConstructor
 public class Image {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     @Column(name = "image_id")
     private Long id;
 

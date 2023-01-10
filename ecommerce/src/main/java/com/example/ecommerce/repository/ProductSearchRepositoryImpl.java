@@ -28,11 +28,12 @@ public class ProductSearchRepositoryImpl extends QuerydslRepositorySupport imple
     @Override
     public List<CategoryProduct> searchProductBuilder(ProductSearchCondition condition) {
         BooleanBuilder builder = new BooleanBuilder();
-        if(condition.getCategoryId().size() >0){
-            condition.getCategoryId().forEach(s -> {
-                builder.and(product.categoryIds.contains(s));
-            });
-        }
+
+//        if(condition.getCategoryId().size() >0){
+//            condition.getCategoryId().forEach(s -> {
+//                builder.and(product.contains(s));
+//            });
+//        }
         if(condition.getStandardPrice() != null){
             builder.and(product.price.loe(condition.getStandardPrice()));
         }
