@@ -2,5 +2,5 @@ package com.example.ecommerce.domain.member;
 
 public enum Grade {
 
-    ADMIN, MEMBER, GUEST
+    ADMIN, EMPLOYEE, MANAGER, GUEST
 }

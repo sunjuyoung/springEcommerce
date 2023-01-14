@@ -38,18 +38,21 @@ public class Product {
     @JoinColumn(name = "category_id")
     private Category category;
 
-//    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
-//            orphanRemoval = true, fetch = FetchType.LAZY)
     @ElementCollection
     @CollectionTable(name = "product_images", joinColumns = @JoinColumn(name = "product_id"))
     private List<Image> images = new ArrayList<>();
 
-    @OneToMany
+    @OneToMany(mappedBy = "product" ,
+            cascade = CascadeType.REMOVE,
+            orphanRemoval = true)
     private List<Review> review = new ArrayList<>();
 
     protected Product(){
     }
 
+    public Product(Long id){
+        this.id = id;
+    }
     public Product( String name, int price, String detail, List<Image> images) {
 
         this.name = name;

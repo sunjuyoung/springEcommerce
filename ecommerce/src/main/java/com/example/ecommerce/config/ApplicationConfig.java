@@ -1,6 +1,8 @@
 package com.example.ecommerce.config;
 
 import com.example.ecommerce.repository.MemberRepository;
+import com.example.ecommerce.service.CustomDetailService;
+import com.example.ecommerce.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
@@ -22,17 +24,15 @@ public class ApplicationConfig {
 
     private final MemberRepository repository;
 
-    @Bean
-    public UserDetailsService userDetailsService() {
-        return username -> repository.findByEmail(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-    }
+
+    private final CustomDetailService customDetailService;
+    private final PasswordEncoder passwordEncoder;
 
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(userDetailsService());
-        authProvider.setPasswordEncoder(passwordEncoder());
+        authProvider.setUserDetailsService(customDetailService);
+        authProvider.setPasswordEncoder(passwordEncoder);
         return authProvider;
     }
     @Bean
@@ -40,20 +40,7 @@ public class ApplicationConfig {
         return config.getAuthenticationManager();
     }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
 
-    @Bean
-    public ModelMapper modelMapper(){
-        ModelMapper modelMapper = new ModelMapper();
-        modelMapper.getConfiguration()
-                .setFieldMatchingEnabled(true)
-                .setSourceNameTokenizer(NameTokenizers.UNDERSCORE)
-                .setDestinationNameTokenizer(NameTokenizers.UNDERSCORE)
-                .setFieldAccessLevel(org.modelmapper.config.Configuration.AccessLevel.PRIVATE)
-                .setMatchingStrategy(MatchingStrategies.LOOSE);
-        return modelMapper;
-    }
+
+
 }

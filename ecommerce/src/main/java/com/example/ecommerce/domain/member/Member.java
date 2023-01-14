@@ -1,5 +1,7 @@
 package com.example.ecommerce.domain.member;
 
+import com.example.ecommerce.domain.review.Review;
+import com.example.ecommerce.dto.MemberUpdateRequest;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -9,6 +11,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -33,12 +36,14 @@ public class Member implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Grade grade;
 
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
+    private List<Review> reviews = new ArrayList<>();
 
     protected Member(){
     }
 
-    public Member( String name, String password,String email) {
 
+    public Member( String name, String password,String email) {
         this.name = name;
         this.email = email;
         this.password = password;
@@ -78,5 +83,14 @@ public class Member implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public void updateMember(MemberUpdateRequest request,Address address) {
+        this.name = request.getName();
+        this.address = address;
+
+    }
+    public Member(Long id){
+        this.id = id;
     }
 }
