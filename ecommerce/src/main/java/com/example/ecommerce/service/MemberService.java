@@ -1,6 +1,6 @@
 package com.example.ecommerce.service;
 
-import com.example.ecommerce.config.CustomUser;
+import com.example.ecommerce.config.JwtService;
 import com.example.ecommerce.domain.member.Address;
 import com.example.ecommerce.domain.member.Member;
 import com.example.ecommerce.dto.*;
@@ -9,19 +9,13 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -31,6 +25,8 @@ public class MemberService{
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final ModelMapper modelMapper;
+    private final JwtService jwtService;
+    private final AuthenticationManager authenticationManager;
 
     public RegisterResponse register(RegisterRequest request) {
         Member member = new Member(
@@ -44,17 +40,23 @@ public class MemberService{
     }
 
     public LoginResponse login(LoginRequest request) {
-       // UserDetails userDetails = userDetailsService.loadUserByUsername(request.getEmail());
-//        UsernamePasswordAuthenticationToken token =  new UsernamePasswordAuthenticationToken(
-//                userDetails,null,
-//                List.of(new SimpleGrantedAuthority("ROLE_GUEST"))
-//        );
-//       // authenticationManager.authenticate(token);
-//        SecurityContextHolder.getContext().setAuthentication(token);
-//        return LoginResponse.builder()
-//                .email(request.getEmail())
-//                .build();
-        return null;
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        request.getEmail(),
+                        request.getPassword()
+                )
+        );
+        Member member = memberRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new UsernameNotFoundException("not found user"));
+
+        String token = jwtService.generateToken(member);
+        return LoginResponse.builder()
+                .email(member.getEmail())
+                .token(token)
+                .name(member.getName())
+                .id(member.getId())
+                .build();
+
 
 
     }
